@@ -87,7 +87,12 @@ public void OnClientCookiesCached(int client) {
 	// Read cookie from client
 	char cookieBuffer[2];
 	GetClientCookie(client, cookie_sm_autohop, cookieBuffer, sizeof cookieBuffer);
-	autohopEnabled[client] = StringToInt(cookieBuffer) ? true : false;
+	if (!cookieBuffer) {
+		// hasn't used plugin before, initialize with true
+		SetClientCookie(client, cookie_sm_autohop, "1");
+	} else {
+		autohopEnabled[client] = StringToInt(cookieBuffer) ? true : false;
+	}
 }
 
 public Action OnPlayerRunCmd(int client, int &buttons)
