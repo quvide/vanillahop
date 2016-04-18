@@ -35,9 +35,15 @@ public void OnPluginStart()
 	}
 }
 
+/**
+ * Callback for /autohop. We toggle the value and set client cookie accordingly.
+ *
+ * @param client  client id
+ * @param argc  count of arguments given
+ * @return Action
+ */
 public Action command_sm_autohop(int client, int argc)
 {
-	// Toggle per-client autohop
 	autohopEnabled[client] = !autohopEnabled[client];
 
 	if (AreClientCookiesCached(client)) {
@@ -49,8 +55,14 @@ public Action command_sm_autohop(int client, int argc)
 	return Plugin_Handled;
 }
 
+/**
+ * This is called when a joining players' client cookies are cached.
+ * We read them and set value to internal array.
+ *
+ * @param client  client id
+ * @noreturn
+ */
 public void OnClientCookiesCached(int client) {
-	// Read cookie from client
 	char cookieBuffer[2];
 	GetClientCookie(client, cookie_sm_autohop, cookieBuffer, sizeof cookieBuffer);
 	if (!cookieBuffer) {
@@ -61,14 +73,19 @@ public void OnClientCookiesCached(int client) {
 	}
 }
 
+/**
+ * Called when processing player movement keys.
+ *
+ * Bunnyhopping traditionally works by jumping again on the same tick you hit the ground.
+ * We fake your buttons so that the server thinks you are not holding space while in air
+ * and hit it just as you hit the ground.
+ *
+ * @param client   client id
+ * @param buttons  buttons currently pressed
+ * @return Action
+ */
 public Action OnPlayerRunCmd(int client, int &buttons)
 {
-	/*
-		Explanation:
-		Bunnyhopping traditionally works by jumping again on the same tick you hit the ground.
-		We fake your buttons so that the server thinks you are not holding space while in air
-		and hit it just as you hit the ground.
-	*/
 	if (sm_autohop_enabled.BoolValue && autohopEnabled[client] && IsPlayerAlive(client) && !(GetEntityFlags(client) & FL_ONGROUND) && !(GetEntityMoveType(client) & MOVETYPE_LADDER) && GetEntProp(client, Prop_Data, "m_nWaterLevel") <= 1) {
 		buttons &= ~IN_JUMP;
 	}
