@@ -19,6 +19,7 @@ Handle cookie_sm_autohop;
 public void OnPluginStart()
 {
 	// Server-side
+	LoadTranslations("vanillahop.phrases.txt");
 	AutoExecConfig(true);
 	sm_autohop_enabled = CreateConVar("sm_autohop_enable", "1", "Enables autohop (0/1)", FCVAR_NOTIFY);
 
@@ -43,7 +44,7 @@ public Action command_sm_autohop(int client, int argc)
 		SetClientCookie(client, cookie_sm_autohop, autohopEnabled[client] ? "1" : "0");
 	}
 
-	ReplyToCommand(client, "Type \x07/autohop\x01 to %s autohop again!", autohopEnabled[client] ? "disable" : "enable");
+	ReplyToCommand(client, "%t", autohopEnabled[client] ? "autohop_enabled" : "autohop_disabled", "\x07/autohop\x01");
 
 	return Plugin_Handled;
 }

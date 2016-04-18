@@ -1,0 +1,14 @@
+"Phrases"
+{
+    "autohop_enabled"
+    {
+        "#format" "{1:s}"
+        "en" "Type {1} to disable autohop."
+    }
+
+    "autohop_disabled"
+    {
+        "#format" "{1:s}"
+        "en" "Type {1} to enable autohop."
+    }
+}
